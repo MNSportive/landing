@@ -1,4 +1,4 @@
-import Logo from '../../public/mns.svg'
+import Logo from '../mns.svg'
 import { useState } from 'react'
 import { FadeInModal } from './Modal'
 
