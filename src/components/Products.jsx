@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   Card,
@@ -9,14 +9,33 @@ import {
   ButtonGroup,
   Button,
   Container,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
+  Badge,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Avatar,
+  ListItemAvatar,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import productLedger from '../utils/products.json'
+import { useCart } from '../contexts/cartContext'
 
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
+  const { addToCart } = useCart()
 
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1)
@@ -28,8 +47,7 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = () => {
     if (quantity > 0) {
-      console.log(`Added ${quantity} ${product.productName} to cart`)
-      // Here you would typically dispatch an action to add to cart
+      addToCart(product, quantity)
       setQuantity(0) // Reset after adding to cart
     }
   }
@@ -98,25 +116,209 @@ const ProductCard = ({ product }) => {
   )
 }
 
+const CartDrawer = ({ open, onClose }) => {
+  const { items, totalAmount, totalQuantity, removeFromCart, clearCart } =
+    useCart()
+
+  return (
+    <Drawer anchor="right" open={open} onClose={onClose}>
+      <Box sx={{ width: 350, p: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6" component="div">
+            Panier d'achat ({totalQuantity})
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            startIcon={<DeleteIcon />}
+            onClick={clearCart}
+            disabled={items.length === 0}
+          >
+            Vider
+          </Button>
+        </Box>
+
+        <Divider />
+
+        {items.length === 0 ? (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 300,
+            }}
+          >
+            <ShoppingBasketIcon
+              sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }}
+            />
+            <Typography variant="body1" color="text.secondary">
+              Votre panier est vide
+            </Typography>
+          </Box>
+        ) : (
+          <List sx={{ width: '100%' }}>
+            {items.map((item) => (
+              <React.Fragment key={item.id}>
+                <ListItem
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <RemoveIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <ShoppingBasketIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.productName}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {item.price}€ x {item.quantity}
+                        </Typography>
+                        {` — ${item.category}`}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </React.Fragment>
+            ))}
+          </List>
+        )}
+
+        <Box sx={{ mt: 2, p: 2, backgroundColor: 'background.paper' }}>
+          <Typography variant="h6" gutterBottom>
+            Total: {totalAmount.toFixed(2)}€
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={items.length === 0}
+            sx={{ mt: 2 }}
+          >
+            Passer à la caisse
+          </Button>
+        </Box>
+      </Box>
+    </Drawer>
+  )
+}
+
 export const Products = () => {
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [filteredProducts, setFilteredProducts] = useState(productLedger)
+  const [categories, setCategories] = useState([])
+  const [cartOpen, setCartOpen] = useState(false)
+  const { totalQuantity } = useCart()
+
+  useEffect(() => {
+    const uniqueCategories = [
+      ...new Set(productLedger.map((product) => product.category)),
+    ]
+    setCategories(uniqueCategories)
+  }, [])
+
+  useEffect(() => {
+    if (categoryFilter === 'all') {
+      setFilteredProducts(productLedger)
+    } else {
+      const filtered = productLedger.filter(
+        (product) => product.category === categoryFilter
+      )
+      setFilteredProducts(filtered)
+    }
+  }, [categoryFilter])
+
+  // Handle filter change
+  const handleFilterChange = (event) => {
+    setCategoryFilter(event.target.value)
+  }
+
+  const toggleCart = () => {
+    setCartOpen(!cartOpen)
+  }
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography
-        variant="h4"
-        component="h1"
-        gutterBottom
-        sx={{ mb: 4, fontWeight: 'bold' }}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+        }}
       >
-        Produits
-      </Typography>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+          Produits
+        </Typography>
 
-      <Grid container spacing={3}>
-        {productLedger.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
-      </Grid>
+        <IconButton color="primary" onClick={toggleCart}>
+          <Badge badgeContent={totalQuantity} color="error">
+            <ShoppingCartIcon />
+          </Badge>
+        </IconButton>
+      </Box>
+
+      <Box sx={{ mb: 4 }}>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <FilterListIcon color="primary" />
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="category-filter-label">Catégorie</InputLabel>
+            <Select
+              labelId="category-filter-label"
+              id="category-filter"
+              value={categoryFilter}
+              onChange={handleFilterChange}
+              label="Catégorie"
+            >
+              <MenuItem value="all">Toutes les catégories</MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category} value={category}>
+                  {category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Stack>
+      </Box>
+
+      {filteredProducts.length === 0 ? (
+        <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
+          Aucun produit trouvé dans cette catégorie.
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {filteredProducts.map((product) => (
+            <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+              <ProductCard product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </Container>
   )
 }
