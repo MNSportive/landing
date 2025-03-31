@@ -34,6 +34,7 @@ export const Order = () => {
     setPhone('')
     setEmail('')
     setStreet('')
+    setCity('')
     setZip('')
     setCountry('')
   }
