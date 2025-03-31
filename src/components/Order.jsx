@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material'
-import { postToGoogleForms } from '../utils/helpers'
+import { postToGoogleForms, generateRandomString } from '../utils/helpers'
 import { countries } from '../utils/countries'
 import { useCart } from '../contexts/cartContext'
 
@@ -41,6 +41,7 @@ export const Order = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     setError(null)
+    const orderId = generateRandomString()
     try {
       const res = await postToGoogleForms(
         '1FAIpQLSdl-ZHQkbm7h3_cJ8adH3lCUwM-XeofbI8fSedmC_jbH2jHgg',
@@ -53,6 +54,7 @@ export const Order = () => {
           'entry.775643275': humanReadableProducts,
           'entry.947045538': totalAmount,
           'entry.1325735342': totalQuantity,
+          'entry.1599914579': orderId,
         }
       )
 
