@@ -114,7 +114,7 @@ export const CartProvider = ({ children }) => {
   const value = {
     items: state.items,
     totalQuantity: state.totalQuantity,
-    totalAmount: state.totalAmount,
+    totalAmount: Math.round(state.totalAmount * 100) / 100,
     addToCart,
     removeFromCart,
     clearCart,
