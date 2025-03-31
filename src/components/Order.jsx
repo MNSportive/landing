@@ -9,6 +9,7 @@ import {
 import { postToGoogleForms, generateRandomString } from '../utils/helpers'
 import { countries } from '../utils/countries'
 import { useCart } from '../contexts/cartContext'
+import { OrderSuccessMessage } from './OrderSucc'
 
 export const Order = () => {
   const [name, setName] = useState('')
@@ -20,7 +21,7 @@ export const Order = () => {
   const [country, setCountry] = useState('')
   const [isOrderSent, setIsOrderSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [data, setData] = useState(null)
+  const [_, setData] = useState(null)
   const [error, setError] = useState(null)
   const [buttonText, setButtonText] = useState('Commander')
   const { items, totalAmount, totalQuantity, clearCart } = useCart()
@@ -59,19 +60,21 @@ export const Order = () => {
         }
       )
 
-      if (!res || res.error) {
-        setError(res.error || res || 'ay dios mio')
-      } else if (res.data) {
-        setData(res.data)
+      if (res && res.error) {
+        setError(res.error || 'Error submitting form')
+      } else {
+        if (res && res.data) {
+          setData(res.data)
+        }
         setIsOrderSent(true)
         setButtonText('Order Sent')
+        clearCart()
+        emptyInputs()
       }
     } catch (err) {
       setError(err.message || 'An unexpected error occurred')
     } finally {
       setIsLoading(false)
-      clearCart()
-      emptyInputs()
     }
   }
 
@@ -84,16 +87,10 @@ export const Order = () => {
       )}
 
       {isOrderSent ? (
-        <Alert severity="success">
-          Your order has been successfully submitted!
-        </Alert>
-      ) : data ? (
-        <Alert severity="warning">
-          Uh oh, we currently have no products for you :(
-        </Alert>
+        <OrderSuccessMessage orderId={'asdasd'} />
       ) : (
         <>
-          <form className="flex row form-row">
+          <form className="flex row form-row" id="checkout">
             <div className="flex column form-column">
               <TextField
                 id="outlined-basic"
