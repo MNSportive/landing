@@ -23,6 +23,7 @@ import {
   Divider,
   Avatar,
   ListItemAvatar,
+  useTheme,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
@@ -36,6 +37,7 @@ import { useCart } from '../contexts/cartContext'
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
   const { addToCart } = useCart()
+  const theme = useTheme()
 
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1)
@@ -60,6 +62,7 @@ const ProductCard = ({ product }) => {
         flexDirection: 'column',
         position: 'relative',
         opacity: product.stock > 0 ? 1 : 0.7,
+        background: theme.palette.background.paper,
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
@@ -79,7 +82,6 @@ const ProductCard = ({ product }) => {
           sx={{ mb: 2 }}
         />
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {product.consumerPrice}€
           {product.consumerPrice.toFixed(2)}€
         </Typography>
       </CardContent>
@@ -262,7 +264,7 @@ export const Products = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }} id="products">
       <Box
         sx={{
           display: 'flex',
