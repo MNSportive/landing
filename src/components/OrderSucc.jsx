@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Typography, Paper, Divider } from '@mui/material'
+import { Box, Typography, Paper, Divider, useTheme } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 export const OrderSuccessMessage = ({ orderId }) => {
+  const theme = useTheme()
   const colors = {
     armyGreen: '#4B5320',
     khaki: '#BDB76B',
@@ -17,7 +18,7 @@ export const OrderSuccessMessage = ({ orderId }) => {
         mx: 'auto',
         my: 4,
         p: 4,
-        backgroundColor: colors.sand,
+        backgroundColor: theme.palette.secondary.light,
         border: `1px solid ${colors.khaki}`,
         borderRadius: 2,
       }}
