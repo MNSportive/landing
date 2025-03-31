@@ -80,6 +80,7 @@ const ProductCard = ({ product }) => {
         />
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.consumerPrice}€
+          {product.consumerPrice.toFixed(2)}€
         </Typography>
       </CardContent>
 
