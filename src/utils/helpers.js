@@ -19,7 +19,7 @@ export const postToGoogleForms = async (formId, formData) => {
 }
 
 export const generateRandomString = () => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let result = ''
   for (let i = 0; i < 16; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length))
