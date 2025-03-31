@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import { postToGoogleForms } from '../utils/helpers'
 import { countries } from '../utils/countries'
+import { useCart } from '../contexts/cartContext'
 
 export const Order = () => {
   const [name, setName] = useState('')
@@ -22,16 +23,28 @@ export const Order = () => {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [buttonText, setButtonText] = useState('Commander')
+  const { items, totalAmount, totalQuantity, clearCart } = useCart()
 
+  const humanReadableProducts = items
+    .map((item) => `${item.quantity} x ${item.productName} - ${item.id}`)
+    .join('\n')
+
+  console.log(humanReadableProducts)
   const handleSubmit = async () => {
     setIsLoading(true)
     setError(null)
-
     try {
       const res = await postToGoogleForms(
-        '1FAIpQLSfd90auy-HwKdd8OePw4WIqCiNsj5DaCULWVnBWgcKTwugiYw',
+        '1FAIpQLSdl-ZHQkbm7h3_cJ8adH3lCUwM-XeofbI8fSedmC_jbH2jHgg',
         {
-          'entry.1154481469': `[itt lesz az is hogy, hogy miket rendelt]\nNev: ${name}\nTel: ${phone}\nCim: ${street}\n${city}\n${zip}\n${country}\n\nEmail: ${email}`,
+          'entry.1656801423': name,
+          'entry.1985350856': email,
+          'entry.628778403': phone,
+          'entry.842398486': `${street}, ${city}, ${zip}`,
+          'entry.1031965433': country,
+          'entry.775643275': humanReadableProducts,
+          'entry.947045538': totalAmount,
+          'entry.1325735342': totalQuantity,
         }
       )
 
@@ -46,6 +59,7 @@ export const Order = () => {
       setError(err.message || 'An unexpected error occurred')
     } finally {
       setIsLoading(false)
+      clearCart()
     }
   }
 
