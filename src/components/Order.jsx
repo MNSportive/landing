@@ -29,7 +29,15 @@ export const Order = () => {
     .map((item) => `${item.quantity} x ${item.productName} - ${item.id}`)
     .join('\n')
 
-  console.log(humanReadableProducts)
+  const emptyInputs = () => {
+    setName('')
+    setPhone('')
+    setEmail('')
+    setStreet('')
+    setZip('')
+    setCountry('')
+  }
+
   const handleSubmit = async () => {
     setIsLoading(true)
     setError(null)
@@ -60,6 +68,7 @@ export const Order = () => {
     } finally {
       setIsLoading(false)
       clearCart()
+      emptyInputs()
     }
   }
 
