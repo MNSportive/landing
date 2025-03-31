@@ -182,7 +182,9 @@ export const Order = () => {
               !street ||
               !city ||
               !zip ||
-              country !== 'Mayotte'
+              country !== 'Mayotte' ||
+              !items ||
+              !items.length
             }
             sx={{ mt: 2 }}
           >
