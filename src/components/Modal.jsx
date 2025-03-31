@@ -22,7 +22,7 @@ const style = {
 const faq = {
   title: 'FAQ (Foire Aux Questions)',
   content: (
-    <>
+    <div>
       <ol className="modal-faq">
         <li>
           <b>Commandes et paiements</b>
@@ -84,7 +84,7 @@ const faq = {
           </ul>
         </li>
       </ol>
-    </>
+    </div>
   ),
 }
 
@@ -121,11 +121,11 @@ export const FadeInModal = ({ handleClose, open, theme }) => {
       <Fade in={open}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            {theme === 'about' ? about.title : faq.title}
+            <b>{theme === 'about' ? about.title : faq.title}</b>
           </Typography>
-          <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+          <Box id="transition-modal-description" sx={{ mt: 2 }}>
             {theme === 'about' ? about.content : faq.content}
-          </Typography>
+          </Box>
         </Box>
       </Fade>
     </Modal>
