@@ -19,6 +19,7 @@ export const Order = () => {
   const [zip, setZip] = useState('')
   const [city, setCity] = useState('')
   const [country, setCountry] = useState('')
+  const [orderId, setOrderId] = useState('')
   const [isOrderSent, setIsOrderSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [_, setData] = useState(null)
@@ -43,7 +44,8 @@ export const Order = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     setError(null)
-    const orderId = generateRandomString()
+    const generatedOrderId = generateRandomString()
+    setOrderId(generatedOrderId)
     try {
       const res = await postToGoogleForms(
         '1FAIpQLSdl-ZHQkbm7h3_cJ8adH3lCUwM-XeofbI8fSedmC_jbH2jHgg',
@@ -56,7 +58,7 @@ export const Order = () => {
           'entry.775643275': humanReadableProducts,
           'entry.947045538': totalAmount,
           'entry.1325735342': totalQuantity,
-          'entry.1599914579': orderId,
+          'entry.1599914579': generatedOrderId,
         }
       )
 
@@ -87,7 +89,7 @@ export const Order = () => {
       )}
 
       {isOrderSent ? (
-        <OrderSuccessMessage orderId={'asdasd'} />
+        <OrderSuccessMessage orderId={orderId} />
       ) : (
         <>
           <form className="flex row form-row" id="checkout">
@@ -168,7 +170,7 @@ export const Order = () => {
             </div>
           </form>
           <Button
-            className="button-primary"
+            className="button-primary order-submit-button"
             variant="contained"
             onClick={handleSubmit}
             disabled={
