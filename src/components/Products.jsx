@@ -220,6 +220,13 @@ const CartDrawer = ({ open, onClose }) => {
             fullWidth
             disabled={items.length === 0}
             sx={{ mt: 2 }}
+            onClick={() => {
+              onClose()
+              window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth',
+              })
+            }}
           >
             Passer à la caisse
           </Button>
@@ -321,7 +328,12 @@ export const Products = () => {
         </Grid>
       )}
 
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <CartDrawer
+        open={cartOpen}
+        onClose={() => {
+          setCartOpen(false)
+        }}
+      />
     </Container>
   )
 }
