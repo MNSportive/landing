@@ -64,6 +64,11 @@ footer {
   margin-top: 12px !important;
 }
 
+.order-submit-button,
+.order-submit-button:disabled {
+  margin-bottom: 2rem;
+}
+
 .form-column {
   gap: 1rem;
 }

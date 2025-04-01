@@ -31,7 +31,6 @@ export const Info = () => {
           mb={3}
           sx={{
             color: theme.palette.primary.main,
-            fontFamily: 'Oswald, sans-serif',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
           }}
@@ -89,7 +88,6 @@ export const Info = () => {
             sx={{
               backgroundColor: theme.palette.primary.main,
               mt: 2,
-              fontFamily: 'Oswald, sans-serif',
               letterSpacing: '0.05em',
               '&:hover': {
                 backgroundColor: theme.palette.primary.dark,

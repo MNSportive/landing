@@ -36,29 +36,23 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
     h1: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 700,
       letterSpacing: '0.02em',
     },
     h2: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 600,
       letterSpacing: '0.01em',
     },
     h3: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 600,
     },
     h4: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 500,
     },
     h5: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 500,
     },
     h6: {
-      fontFamily: 'Oswald, sans-serif',
       fontWeight: 500,
     },
     button: {
