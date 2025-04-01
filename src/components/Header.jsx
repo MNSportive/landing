@@ -37,7 +37,7 @@ export const Header = () => {
           src={Logo}
           alt="Mayotte Nutrition Sportive"
           sx={{
-            height: isMobile ? 40 : 60,
+            height: isMobile ? 40 : 50,
             mr: 2,
           }}
         />
