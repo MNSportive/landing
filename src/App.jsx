@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './styles/theme'
 
-const showPrematureContent = true
+const showPrematureContent = false
 
 function App() {
   return (

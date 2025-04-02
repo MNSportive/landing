@@ -39,7 +39,11 @@ export const Header = () => {
           }}
         />
 
-        <Box display="flex" alignItems="center" gap={3}>
+        <Box
+          display="flex"
+          alignItems="center"
+          gap={isMobile ? 1 : 3}
+        >
           {[
             { label: 'À propos', type: 'about' },
             { label: 'FAQ', type: 'faq' },
@@ -52,9 +56,12 @@ export const Header = () => {
                 color: theme.palette.primary.main,
                 fontWeight: 500,
                 textTransform: 'none',
-                fontSize: '1rem',
+                fontSize: isMobile ? '0.875rem' : '1rem',
                 fontFamily: 'Roboto, sans-serif',
                 textDecoration: 'underline',
+                whiteSpace: 'nowrap',
+                minWidth: 'auto',
+                paddingX: isMobile ? 0.5 : 1,
                 '&:hover': {
                   backgroundColor: 'transparent',
                   color: theme.palette.primary.dark,
