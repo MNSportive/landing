@@ -5,6 +5,8 @@ import {
   Autocomplete,
   CircularProgress,
   Alert,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material'
 import { postToGoogleForms, generateRandomString } from '../utils/helpers'
 import { countries } from '../utils/countries'
@@ -22,6 +24,7 @@ export const Order = () => {
   const [orderId, setOrderId] = useState('')
   const [isOrderSent, setIsOrderSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [hasAgreed, setHasAgreed] = useState(false)
   const [_, setData] = useState(null)
   const [error, setError] = useState(null)
   const [buttonText, setButtonText] = useState('Commander')
@@ -121,6 +124,22 @@ export const Order = () => {
                 margin="normal"
                 required
               />
+              <Autocomplete
+                disablePortal
+                options={countries}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Country"
+                    margin="normal"
+                    required
+                  />
+                )}
+                value={country}
+                onChange={(event, newValue) => {
+                  setCountry(newValue || '')
+                }}
+              />
             </div>
             <div className="flex column form-column">
               <TextField
@@ -151,24 +170,20 @@ export const Order = () => {
                 margin="normal"
                 required
               />
-              <Autocomplete
-                disablePortal
-                options={countries}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Country"
-                    margin="normal"
-                    required
-                  />
-                )}
-                value={country}
-                onChange={(event, newValue) => {
-                  setCountry(newValue || '')
-                }}
-              />
             </div>
           </form>
+          <div className="flex column form-column">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={hasAgreed}
+                  onChange={(e) => setHasAgreed(e.target.checked)}
+                  required
+                />
+              }
+              label="J'ai lu et j'accepte les CGV"
+            />
+          </div>
           <Button
             className="button-primary order-submit-button"
             variant="contained"
@@ -183,7 +198,8 @@ export const Order = () => {
               !zip ||
               country !== 'Mayotte' ||
               !items ||
-              !items.length
+              !items.length ||
+              !hasAgreed
             }
             sx={{ mt: 2 }}
           >
