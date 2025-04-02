@@ -3,7 +3,6 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Typography,
   Button,
   useTheme,
   useMediaQuery,
@@ -15,11 +14,9 @@ export const Header = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const [aboutOpen, setAboutOpen] = useState(false)
-  const [FAQOpen, setFAQOpen] = useState(false)
+  const [modalType, setModalType] = useState(null)
 
-  const handleAboutClose = () => setAboutOpen(false)
-  const handleFAQClose = () => setFAQOpen(false)
+  const handleClose = () => setModalType(null)
 
   return (
     <AppBar
@@ -43,49 +40,39 @@ export const Header = () => {
         />
 
         <Box display="flex" alignItems="center" gap={3}>
-          <Button
-            onClick={() => setAboutOpen(true)}
-            sx={{
-              color: theme.palette.primary.main,
-              fontWeight: 500,
-              textTransform: 'none',
-              fontSize: '1rem',
-              fontFamily: 'Roboto, sans-serif',
-              textDecoration: 'underline',
-              '&:hover': {
-                backgroundColor: 'transparent',
-                color: theme.palette.primary.dark,
-              },
-            }}
-          >
-            À propos
-          </Button>
-
-          <Button
-            onClick={() => setFAQOpen(true)}
-            sx={{
-              color: theme.palette.primary.main,
-              fontWeight: 500,
-              textTransform: 'none',
-              fontSize: '1rem',
-              fontFamily: 'Roboto, sans-serif',
-              textDecoration: 'underline',
-              '&:hover': {
-                backgroundColor: 'transparent',
-                color: theme.palette.primary.dark,
-              },
-            }}
-          >
-            FAQ
-          </Button>
+          {[
+            { label: 'À propos', type: 'about' },
+            { label: 'FAQ', type: 'faq' },
+            { label: 'Infos & Contact', type: 'infos' },
+          ].map(({ label, type }) => (
+            <Button
+              key={type}
+              onClick={() => setModalType(type)}
+              sx={{
+                color: theme.palette.primary.main,
+                fontWeight: 500,
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontFamily: 'Roboto, sans-serif',
+                textDecoration: 'underline',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  color: theme.palette.primary.dark,
+                },
+              }}
+            >
+              {label}
+            </Button>
+          ))}
         </Box>
 
-        <FadeInModal
-          handleClose={handleAboutClose}
-          open={aboutOpen}
-          theme="about"
-        />
-        <FadeInModal handleClose={handleFAQClose} open={FAQOpen} theme="faq" />
+        {modalType && (
+          <FadeInModal
+            handleClose={handleClose}
+            open={!!modalType}
+            theme={modalType}
+          />
+        )}
       </Toolbar>
     </AppBar>
   )
