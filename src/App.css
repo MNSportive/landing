@@ -48,6 +48,7 @@ nav a {
 footer {
   justify-content: center;
   margin-bottom: 8px;
+  margin-top: 16px;
 }
 
 .info-content {
@@ -55,15 +56,6 @@ footer {
   background: #a7bbaa;
   padding: 10px;
   border-radius: 10px;
-}
-
-.button-primary {
-  margin-top: 12px !important;
-}
-
-.order-submit-button,
-.order-submit-button:disabled {
-  margin-bottom: 2rem;
 }
 
 .form-column {
