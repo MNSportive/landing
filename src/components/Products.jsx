@@ -37,11 +37,18 @@ import { getInventoryData } from '../utils/helpers'
 
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
-  const { addToCart } = useCart()
+  const { addToCart, items } = useCart()
   const theme = useTheme()
 
+  const inCartQuantity =
+    items.find((item) => item.id === product.id)?.quantity || 0
+
+  const remainingStock = product.stock - inCartQuantity
+
   const handleIncrement = () => {
-    setQuantity((prev) => prev + 1)
+    if (quantity < remainingStock) {
+      setQuantity((prev) => prev + 1)
+    }
   }
 
   const handleDecrement = () => {
@@ -51,7 +58,7 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = () => {
     if (quantity > 0) {
       addToCart(product, quantity)
-      setQuantity(0) // Reset after adding to cart
+      setQuantity(0)
     }
   }
 
@@ -62,7 +69,7 @@ const ProductCard = ({ product }) => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        opacity: product.stock > 0 ? 1 : 0.7,
+        opacity: remainingStock > 0 ? 1 : 0.7,
         background: theme.palette.background.paper,
       }}
     >
@@ -76,12 +83,25 @@ const ProductCard = ({ product }) => {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           poids: {product.weight}
         </Typography>
-        <Chip
-          label={product.stock > 0 ? 'En stock' : 'Rupture de stock'}
-          color={product.stock > 0 ? 'success' : 'error'}
-          size="small"
-          sx={{ mb: 2 }}
-        />
+
+        <Box sx={{ mb: 2 }}>
+          <Chip
+            label={
+              remainingStock > 0
+                ? `En stock (${remainingStock})`
+                : 'Rupture de stock'
+            }
+            color={remainingStock > 0 ? 'success' : 'error'}
+            size="small"
+          />
+
+          {inCartQuantity > 0 && (
+            <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
+              {inCartQuantity} déjà dans le panier
+            </Typography>
+          )}
+        </Box>
+
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.consumerPrice.toFixed(2)}€
         </Typography>
@@ -92,17 +112,26 @@ const ProductCard = ({ product }) => {
           <ButtonGroup variant="outlined" size="small">
             <Button
               onClick={handleDecrement}
-              disabled={quantity === 0 || !product.stock > 0}
+              disabled={quantity === 0 || remainingStock <= 0}
             >
               <RemoveIcon fontSize="small" />
             </Button>
-            <Button disabled={!product.stock > 0} sx={{ minWidth: '50px' }}>
+            <Button disabled={remainingStock <= 0} sx={{ minWidth: '50px' }}>
               {quantity}
             </Button>
-            <Button onClick={handleIncrement} disabled={!product.stock > 0}>
+            <Button
+              onClick={handleIncrement}
+              disabled={remainingStock <= 0 || quantity >= remainingStock}
+            >
               <AddIcon fontSize="small" />
             </Button>
           </ButtonGroup>
+
+          {quantity === remainingStock && remainingStock > 0 && (
+            <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+              Max
+            </Typography>
+          )}
         </Box>
 
         <Button
@@ -111,7 +140,7 @@ const ProductCard = ({ product }) => {
           fullWidth
           startIcon={<ShoppingCartIcon />}
           onClick={handleAddToCart}
-          disabled={quantity === 0 || !product.stock > 0}
+          disabled={quantity === 0 || remainingStock <= 0}
         >
           Ajouter au panier
         </Button>
@@ -121,8 +150,15 @@ const ProductCard = ({ product }) => {
 }
 
 const CartDrawer = ({ open, onClose }) => {
-  const { items, totalAmount, totalQuantity, removeFromCart, clearCart } =
-    useCart()
+  const {
+    items,
+    totalAmount,
+    totalQuantity,
+    removeFromCart,
+    clearCart,
+    updateQuantity,
+    getProductStock,
+  } = useCart()
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -171,43 +207,92 @@ const CartDrawer = ({ open, onClose }) => {
           </Box>
         ) : (
           <List sx={{ width: '100%' }}>
-            {items.map((item) => (
-              <React.Fragment key={item.id}>
-                <ListItem
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      <RemoveIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar>
-                      <ShoppingBasketIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.productName}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {item.price}€ x {item.quantity}
-                        </Typography>
-                        {` — ${item.category}`}
-                      </React.Fragment>
+            {items.map((item) => {
+              const productStock = getProductStock(item.id)
+              const isAtMaxStock = item.quantity >= productStock
+
+              return (
+                <React.Fragment key={item.id}>
+                  <ListItem
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     }
-                  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-              </React.Fragment>
-            ))}
+                  >
+                    <ListItemAvatar>
+                      <Avatar>
+                        <ShoppingBasketIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.productName}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {item.price.toFixed(2)}€ x {item.quantity}
+                          </Typography>
+                          {` — ${item.category}`}
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+
+                  <Box sx={{ pl: 9, pr: 5, pb: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ButtonGroup variant="outlined" size="small">
+                        <Button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          <RemoveIcon fontSize="small" />
+                        </Button>
+                        <Button disabled sx={{ minWidth: '40px' }}>
+                          {item.quantity}
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                          disabled={isAtMaxStock}
+                        >
+                          <AddIcon fontSize="small" />
+                        </Button>
+                      </ButtonGroup>
+
+                      {isAtMaxStock && (
+                        <Typography
+                          variant="caption"
+                          color="error"
+                          sx={{ ml: 1 }}
+                        >
+                          Max
+                        </Typography>
+                      )}
+                    </Box>
+
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ display: 'block', mt: 0.5 }}
+                    >
+                      Stock disponible: {productStock}
+                    </Typography>
+                  </Box>
+
+                  <Divider variant="inset" component="li" />
+                </React.Fragment>
+              )
+            })}
           </List>
         )}
 
