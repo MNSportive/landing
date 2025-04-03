@@ -31,9 +31,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
-import productLedger from '../utils/products.json'
 import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
+import { getInventoryData } from '../utils/helpers'
 
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
@@ -238,34 +238,27 @@ const CartDrawer = ({ open, onClose }) => {
 }
 
 export const Products = () => {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const [filteredProducts, setFilteredProducts] = useState(productLedger)
   const [categories, setCategories] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
   const { totalQuantity } = useCart()
 
   useEffect(() => {
-    const uniqueCategories = [
-      ...new Set(productLedger.map((product) => product.category)),
-    ]
-    setCategories(uniqueCategories)
+    getInventoryData()
+      .then((data) => {
+        setProducts(data)
+        setCategories([...new Set(data.map((product) => product.category))])
+      })
+      .catch((error) => console.error('Error fetching products:', error))
+      .finally(() => setLoading(false))
   }, [])
 
-  useEffect(() => {
-    if (categoryFilter === 'all') {
-      setFilteredProducts(productLedger)
-    } else {
-      const filtered = productLedger.filter(
-        (product) => product.category === categoryFilter
-      )
-      setFilteredProducts(filtered)
-    }
-  }, [categoryFilter])
-
-  // Handle filter change
-  const handleFilterChange = (event) => {
-    setCategoryFilter(event.target.value)
-  }
+  const filteredProducts =
+    categoryFilter === 'all'
+      ? products
+      : products.filter((product) => product.category === categoryFilter)
 
   const toggleCart = () => {
     setCartOpen(!cartOpen)
@@ -298,11 +291,8 @@ export const Products = () => {
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="category-filter-label">Catégorie</InputLabel>
             <Select
-              labelId="category-filter-label"
-              id="category-filter"
               value={categoryFilter}
-              onChange={handleFilterChange}
-              label="Catégorie"
+              onChange={(e) => setCategoryFilter(e.target.value)}
             >
               <MenuItem value="all">Toutes les catégories</MenuItem>
               {categories.map((category) => (
@@ -314,11 +304,6 @@ export const Products = () => {
           </FormControl>
         </Stack>
       </Box>
-
-      {filteredProducts.length === 0 ? (
-        <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
-          Aucun produit trouvé dans cette catégorie.
-        </Typography>
       {loading ? (
         <Box display="flex" justifyContent="center" mt={4}>
           <CircularProgress />
