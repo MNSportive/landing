@@ -18,6 +18,18 @@ export const postToGoogleForms = async (formId, formData) => {
   }
 }
 
+export const getInventoryData = async () => {
+  try {
+    const res = await fetch(
+      'https://raw.githubusercontent.com/MNSportive/mock-data/main/inventory.json'
+    )
+    const json = res.json()
+    return json
+  } catch (err) {
+    console.warn(err)
+  }
+}
+
 export const generateRandomString = () => {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let result = ''

@@ -32,6 +32,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import productLedger from '../utils/products.json'
+import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
 
 const ProductCard = ({ product }) => {
@@ -318,6 +319,10 @@ export const Products = () => {
         <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
           Aucun produit trouvé dans cette catégorie.
         </Typography>
+      {loading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
       ) : (
         <Grid container spacing={3}>
           {filteredProducts.map((product) => (
