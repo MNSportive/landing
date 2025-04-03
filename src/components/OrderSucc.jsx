@@ -50,13 +50,12 @@ export const OrderSuccessMessage = ({ orderId }) => {
           mb={1}
           sx={{ color: colors.armyGreen }}
         >
-          RENDELES ELKULDVE
+          Confirmation de commande
         </Typography>
         <Typography variant="body1" mb={3} color="text.secondary">
-          Megerkezett a rendelesed, kuldjuk majd az emailt hogy hova kell a sok
-          manit utalni. Plusz valami olyan info, hogy a biztonsag kedveert
-          irja/screenshotolja a rendelesi szamot hogy megtalaljuk ha van valami
-          gaz
+          Merci pour votre commande ! Nous sommes ravis de vous informer que
+          nous l’avons bien reçue. Nous vous enverrons bientôt plus
+          d’informations concernant le paiement et la livraison.
         </Typography>
         <Paper
           sx={{
@@ -67,15 +66,19 @@ export const OrderSuccessMessage = ({ orderId }) => {
           }}
         >
           <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography fontWeight="medium">Order Number:</Typography>
+            <Typography fontWeight="medium">Numéro de commande :</Typography>
             <Typography>
               <b>{orderId}</b>
             </Typography>
           </Box>
           <Divider sx={{ my: 1 }} />
           <Box display="flex" justifyContent="space-between">
-            <Typography fontWeight="medium">Varhato erkezes:</Typography>
-            <Typography>Aprilis 5 (ilyen legyen benne?)</Typography>
+            <Typography fontWeight="medium">
+              Délai de livraison estimé :
+            </Typography>
+            <Typography>
+              3 à 5 jours ouvrés après réception du paiement.
+            </Typography>
           </Box>
         </Paper>
       </Box>
