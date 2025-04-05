@@ -375,10 +375,11 @@ const modalVariations = {
               <h3>5. Livraison</h3>
               <p>
                 Une fois le paiement reçu, votre commande sera expédiée dans un
-                délai de 72 heures maximum (3 jours ouvrables), mais au plus
-                tard dans un délai de 5 jours ouvrables. La livraison sera
+                délai de 3 à 5 jours ouvrés après réception du paiement, mais au
+                plus tard dans un délai de 5 jours ouvrables. La livraison sera
                 effectuée à l'adresse de livraison indiquée lors de la commande.
               </p>
+
               <p>
                 Les frais de livraison sont inclus ou seront précisés au moment
                 de la commande.
@@ -618,7 +619,9 @@ const modalVariations = {
               <li className="q">
                 Quels sont les délais de livraison à Mayotte ?
               </li>
-              <li className="ans">72 heures</li>
+              <li className="ans">
+                3 à 5 jours ouvrés après réception du paiement
+              </li>
               <li className="q">La livraison est-elle vraiment gratuite ?</li>
               <li className="ans">Complètement.</li>
               <li className="q">Puis-je suivre ma commande ?</li>
