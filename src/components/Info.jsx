@@ -55,8 +55,11 @@ export const Info = () => {
             color: theme.palette.primary.dark,
           }}
         >
-          Boostez vos performances avec des produits de qualité, livrés
-          directement chez vous!
+          Boostez vos performances avec des produits de qualité, livrés{' '}
+          <i>
+            <b>gratuitement</b>
+          </i>{' '}
+          directement chez vous !
         </Typography>
 
         <Paper
