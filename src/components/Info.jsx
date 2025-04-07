@@ -77,11 +77,20 @@ export const Info = () => {
             lineHeight={1.6}
             background={theme.palette.secondary.light}
           >
-            Mayotte Nutrition Sportive distribue sur tout le territoire de
-            Mayotte les compléments alimentaires BiotechUSA. Conçus pour
-            favoriser une régénération optimale après l'entraînement et soutenir
-            l'amélioration des performances, ces produits de haute qualité vous
-            accompagnent dans votre quête d'excellence sportive.
+            Atteignez vos objectifs avec Mayotte Nutrition Sportive ! Nous vous
+            livrons partout à Mayotte les compléments alimentaires BiotechUSA,
+            marque de référence pour les sportifs exigeants. Formulés pour
+            optimiser la récupération après l’effort, améliorer les performances
+            et accompagner votre progression, nos produits vous aident à
+            repousser vos limites jour après jour. Découvrez une sélection
+            complète de solutions nutritionnelles : L-Carnitine pour brûler les
+            graisses, pre-workout pour maximiser votre énergie à l’entraînement,
+            barres protéinées pour une collation saine et pratique, Whey
+            Protein, Iso Whey Zero et BCAA Zero pour soutenir la prise de muscle
+            et la récupération musculaire. Et ce n’est pas tout : nous proposons
+            bien d’autres produits qui contribuent à une alimentation équilibrée
+            et à un mode de vie axé sur la performance et la santé. Commandez
+            dès maintenant — la livraison est gratuite partout à Mayotte !
           </Typography>
         </Paper>
 

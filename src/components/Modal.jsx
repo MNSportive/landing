@@ -362,8 +362,8 @@ const modalVariations = {
               </p>
               <ul>
                 <li>Nom du bénéficiaire : MAYOTTE NUTRITION SPORTIVE</li>
-                <li>RIB / IBAN : ???</li>
-                <li>BIC / SWIFT : ???</li>
+                <li>RIB / IBAN : BE91905368267476</li>
+                <li>BIC / SWIFT : TRWIBEB1XXX</li>
               </ul>
               <p>
                 Votre commande sera traitée une fois que le paiement aura été
@@ -620,13 +620,15 @@ const modalVariations = {
                 Quels sont les délais de livraison à Mayotte ?
               </li>
               <li className="ans">
-                3 à 5 jours ouvrés après réception du paiement
+                La livraison prend entre 3 et 5 jours ouvrables après la
+                réception du paiement.
               </li>
               <li className="q">La livraison est-elle vraiment gratuite ?</li>
               <li className="ans">Complètement.</li>
               <li className="q">Puis-je suivre ma commande ?</li>
               <li className="ans">
-                Non, mais vous recevrez le colis dans les 72 heures.
+                Non, mais le colis sera livré à domicile et vous serez
+                informé(e) de la date de livraison à l’avance.
               </li>
             </ul>
           </li>
