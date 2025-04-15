@@ -37,6 +37,14 @@ import { getInventoryData } from '../utils/helpers'
 import { useFeatureFlag } from '../contexts/featureContext'
 
 const productImages = import.meta.glob('../assets/*.webp', { eager: true })
+const imageMap = Object.entries(productImages).reduce((acc, [path, module]) => {
+  const fileName = path.split('/').pop() || ''
+  const idMatch = fileName.match(/^_(\d+)_/)
+  if (idMatch) {
+    acc[idMatch[1]] = module.default
+  }
+  return acc
+}, {})
 
 const ProductCard = ({ product }) => {
   const showPrematureContent = useFeatureFlag('prematureContentEnabled')
@@ -66,13 +74,8 @@ const ProductCard = ({ product }) => {
     }
   }
 
-  const imagePath = `../assets/_${product.id}_.webp`
-  const fallbackImagePath = `../assets/mns.webp`
-
   const imageSrc =
-    productImages[imagePath]?.default ||
-    productImages[fallbackImagePath]?.default ||
-    ''
+    imageMap[product.id] || productImages['../assets/mns.webp']?.default
 
   return (
     <Card
@@ -88,7 +91,7 @@ const ProductCard = ({ product }) => {
       {imageSrc && (
         <Box
           component="img"
-          src={imageSrc || '../assets/mns.webp'}
+          src={imageSrc}
           alt={product.productName}
           sx={{
             width: '100%',
