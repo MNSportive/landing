@@ -39,9 +39,10 @@ import { useFeatureFlag } from '../contexts/featureContext'
 const productImages = import.meta.glob('../assets/*.webp', { eager: true })
 const imageMap = Object.entries(productImages).reduce((acc, [path, module]) => {
   const fileName = path.split('/').pop() || ''
-  const idMatch = fileName.match(/^_(\d+)_/)
-  if (idMatch) {
-    acc[idMatch[1]] = module.default
+  const idPart = fileName.split('-')[0]
+  const id = idPart.replace(/^_+|_+$/g, '')
+  if (id) {
+    acc[id] = module.default
   }
   return acc
 }, {})
