@@ -34,10 +34,12 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
 import { getInventoryData } from '../utils/helpers'
+import { useFeatureFlag } from '../contexts/featureContext'
 
 const productImages = import.meta.glob('../assets/*.webp', { eager: true })
 
 const ProductCard = ({ product }) => {
+  const showPrematureContent = useFeatureFlag('prematureContentEnabled')
   const [quantity, setQuantity] = useState(0)
   const { addToCart, items } = useCart()
   const theme = useTheme()
@@ -129,45 +131,51 @@ const ProductCard = ({ product }) => {
           {product.consumerPrice.toFixed(2)}€
         </Typography>
       </CardContent>
+      {showPrematureContent && (
+        <>
+          <Box sx={{ p: 2, pt: 0 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <ButtonGroup variant="outlined" size="small">
+                <Button
+                  onClick={handleDecrement}
+                  disabled={quantity === 0 || remainingStock <= 0}
+                >
+                  <RemoveIcon fontSize="small" />
+                </Button>
+                <Button
+                  disabled={remainingStock <= 0}
+                  sx={{ minWidth: '50px' }}
+                >
+                  {quantity}
+                </Button>
+                <Button
+                  onClick={handleIncrement}
+                  disabled={remainingStock <= 0 || quantity >= remainingStock}
+                >
+                  <AddIcon fontSize="small" />
+                </Button>
+              </ButtonGroup>
 
-      <Box sx={{ p: 2, pt: 0 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <ButtonGroup variant="outlined" size="small">
+              {quantity === remainingStock && remainingStock > 0 && (
+                <Typography variant="caption" color="error" sx={{ ml: 1 }}>
+                  Max
+                </Typography>
+              )}
+            </Box>
+
             <Button
-              onClick={handleDecrement}
+              variant="contained"
+              color="primary"
+              fullWidth
+              startIcon={<ShoppingCartIcon />}
+              onClick={handleAddToCart}
               disabled={quantity === 0 || remainingStock <= 0}
             >
-              <RemoveIcon fontSize="small" />
+              Ajouter au panier
             </Button>
-            <Button disabled={remainingStock <= 0} sx={{ minWidth: '50px' }}>
-              {quantity}
-            </Button>
-            <Button
-              onClick={handleIncrement}
-              disabled={remainingStock <= 0 || quantity >= remainingStock}
-            >
-              <AddIcon fontSize="small" />
-            </Button>
-          </ButtonGroup>
-
-          {quantity === remainingStock && remainingStock > 0 && (
-            <Typography variant="caption" color="error" sx={{ ml: 1 }}>
-              Max
-            </Typography>
-          )}
-        </Box>
-
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          startIcon={<ShoppingCartIcon />}
-          onClick={handleAddToCart}
-          disabled={quantity === 0 || remainingStock <= 0}
-        >
-          Ajouter au panier
-        </Button>
-      </Box>
+          </Box>
+        </>
+      )}
     </Card>
   )
 }
@@ -346,6 +354,7 @@ const CartDrawer = ({ open, onClose }) => {
 }
 
 export const Products = () => {
+  const showPrematureContent = useFeatureFlag('prematureContentEnabled')
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -386,11 +395,13 @@ export const Products = () => {
           Produits
         </Typography>
 
-        <IconButton color="primary" onClick={toggleCart}>
-          <Badge badgeContent={totalQuantity} color="error">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
+        {showPrematureContent && (
+          <IconButton color="primary" onClick={toggleCart}>
+            <Badge badgeContent={totalQuantity} color="error">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+        )}
       </Box>
 
       <Box sx={{ mb: 4 }}>
