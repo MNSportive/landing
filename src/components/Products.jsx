@@ -35,7 +35,7 @@ import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
 import { getInventoryData } from '../utils/helpers'
 
-const productImages = import.meta.glob('../assets/*.png', { eager: true })
+const productImages = import.meta.glob('../assets/*.webp', { eager: true })
 
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
@@ -64,8 +64,8 @@ const ProductCard = ({ product }) => {
     }
   }
 
-  const imagePath = `../assets/${product.id}.png`
-  const fallbackImagePath = `../assets/mns.png`
+  const imagePath = `../assets/_${product.id}_.webp`
+  const fallbackImagePath = `../assets/mns.webp`
 
   const imageSrc =
     productImages[imagePath]?.default ||
@@ -86,7 +86,7 @@ const ProductCard = ({ product }) => {
       {imageSrc && (
         <Box
           component="img"
-          src={imageSrc || '../assets/mns.png'}
+          src={imageSrc || '../assets/mns.webp'}
           alt={product.productName}
           sx={{
             width: '100%',
