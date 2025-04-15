@@ -8,28 +8,30 @@ import { CartProvider } from './contexts/cartContext'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './styles/theme'
-
-const showPrematureContent = false
+import { featureFlags } from './contexts/ff'
+import { FeatureFlagProvider, useFeatureFlag } from './contexts/featureContext'
 
 function App() {
+  const showPrematureContent = useFeatureFlag('prematureContentEnabled')
+  console.log(showPrematureContent)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <CartProvider>
-        <div className="app-container flex column">
-          <Header />
-          <main className="flex column">
-            <Info />
-            {showPrematureContent && (
+      <FeatureFlagProvider flags={featureFlags}>
+        <CartProvider>
+          <div className="app-container flex column">
+            <Header />
+            <main className="flex column">
+              <Info />
               <>
                 <Products />
-                <Order />
+                {showPrematureContent && <Order />}
               </>
-            )}
-          </main>
-          <Footer />
-        </div>
-      </CartProvider>
+            </main>
+            <Footer />
+          </div>
+        </CartProvider>
+      </FeatureFlagProvider>
     </ThemeProvider>
   )
 }
