@@ -35,6 +35,8 @@ import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
 import { getInventoryData } from '../utils/helpers'
 
+const productImages = import.meta.glob('../assets/*.png', { eager: true })
+
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0)
   const { addToCart, items } = useCart()
@@ -62,6 +64,14 @@ const ProductCard = ({ product }) => {
     }
   }
 
+  const imagePath = `../assets/${product.id}.png`
+  const fallbackImagePath = `../assets/mns.png`
+
+  const imageSrc =
+    productImages[imagePath]?.default ||
+    productImages[fallbackImagePath]?.default ||
+    ''
+
   return (
     <Card
       sx={{
@@ -73,6 +83,19 @@ const ProductCard = ({ product }) => {
         background: theme.palette.background.paper,
       }}
     >
+      {imageSrc && (
+        <Box
+          component="img"
+          src={imageSrc || '../assets/mns.png'}
+          alt={product.productName}
+          sx={{
+            width: '100%',
+            height: 180,
+            objectFit: 'contain',
+            p: 2,
+          }}
+        />
+      )}
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.category}
