@@ -13,7 +13,6 @@ import { FeatureFlagProvider, useFeatureFlag } from './contexts/featureContext'
 
 function App() {
   const showPrematureContent = useFeatureFlag('prematureContentEnabled')
-  console.log(showPrematureContent)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
