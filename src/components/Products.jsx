@@ -35,21 +35,12 @@ import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
 import { getInventoryData } from '../utils/helpers'
 import { useFeatureFlag } from '../contexts/featureContext'
-
-const productImages = import.meta.glob('../assets/*.webp', { eager: true })
-const imageMap = Object.entries(productImages).reduce((acc, [path, module]) => {
-  const fileName = path.split('/').pop() || ''
-  const idPart = fileName.split('-')[0]
-  const id = idPart.replace(/^_+|_+$/g, '')
-  if (id) {
-    acc[id] = module.default
-  }
-  return acc
-}, {})
+import fallbackImage from '../assets/mns.webp'
 
 const ProductCard = ({ product }) => {
   const showPrematureContent = useFeatureFlag('prematureContentEnabled')
   const [quantity, setQuantity] = useState(0)
+  const [imageError, setImageError] = useState(false)
   const { addToCart, items } = useCart()
   const theme = useTheme()
 
@@ -75,8 +66,21 @@ const ProductCard = ({ product }) => {
     }
   }
 
-  const imageSrc =
-    imageMap[product.id] || productImages['../assets/mns.webp']?.default
+  const handleImageError = () => {
+    setImageError(true)
+  }
+
+  const GITHUB_REPO_BASE_URL =
+    'https://raw.githubusercontent.com/MNSportive/assets/refs/heads/main'
+
+  const getProductImage = () => {
+    try {
+      return `${GITHUB_REPO_BASE_URL}/_${product.id}_.webp`
+    } catch (error) {
+      console.error(`Error loading image for product ${product.id}:`, error)
+      return `${GITHUB_REPO_BASE_URL}/mns.webp`
+    }
+  }
 
   return (
     <Card
@@ -89,19 +93,18 @@ const ProductCard = ({ product }) => {
         background: theme.palette.background.paper,
       }}
     >
-      {imageSrc && (
-        <Box
-          component="img"
-          src={imageSrc}
-          alt={product.productName}
-          sx={{
-            width: '100%',
-            height: 180,
-            objectFit: 'contain',
-            p: 2,
-          }}
-        />
-      )}
+      <Box
+        component="img"
+        src={imageError ? fallbackImage : getProductImage()}
+        alt={product.productName}
+        sx={{
+          width: '100%',
+          height: 180,
+          objectFit: 'contain',
+          p: 2,
+        }}
+        onError={handleImageError}
+      />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.category}
@@ -112,24 +115,25 @@ const ProductCard = ({ product }) => {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           poids: {product.weight}
         </Typography>
+        {showPrematureContent && (
+          <Box sx={{ mb: 2 }}>
+            <Chip
+              label={
+                remainingStock > 0
+                  ? `En stock (${remainingStock})`
+                  : 'Rupture de stock'
+              }
+              color={remainingStock > 0 ? 'success' : 'error'}
+              size="small"
+            />
 
-        <Box sx={{ mb: 2 }}>
-          <Chip
-            label={
-              remainingStock > 0
-                ? `En stock (${remainingStock})`
-                : 'Rupture de stock'
-            }
-            color={remainingStock > 0 ? 'success' : 'error'}
-            size="small"
-          />
-
-          {inCartQuantity > 0 && (
-            <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-              {inCartQuantity} déjà dans le panier
-            </Typography>
-          )}
-        </Box>
+            {inCartQuantity > 0 && (
+              <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
+                {inCartQuantity} déjà dans le panier
+              </Typography>
+            )}
+          </Box>
+        )}
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           {product.consumerPrice.toFixed(2)}€
