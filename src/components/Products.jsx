@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import {
   Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
   Card,
   CardContent,
   Typography,
@@ -15,7 +19,6 @@ import {
   MenuItem,
   Stack,
   Badge,
-  IconButton,
   Drawer,
   List,
   ListItem,
@@ -30,6 +33,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
+import CloseIcon from '@mui/icons-material/Close'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import { CircularProgress } from '@mui/material'
 import { useCart } from '../contexts/cartContext'
@@ -37,7 +41,7 @@ import { getInventoryData } from '../utils/helpers'
 import { useFeatureFlag } from '../contexts/featureContext'
 import fallbackImage from '../assets/mns.webp'
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onClick }) => {
   const showPrematureContent = useFeatureFlag('prematureContentEnabled')
   const [quantity, setQuantity] = useState(0)
   const [imageError, setImageError] = useState(false)
@@ -91,6 +95,7 @@ const ProductCard = ({ product }) => {
         position: 'relative',
         opacity: remainingStock > 0 ? 1 : 0.7,
         background: theme.palette.background.paper,
+        cursor: 'pointer',
       }}
     >
       <Box
@@ -104,6 +109,7 @@ const ProductCard = ({ product }) => {
           p: 2,
         }}
         onError={handleImageError}
+        onClick={() => onClick(product)}
       />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
@@ -370,6 +376,9 @@ export const Products = () => {
   const [cartOpen, setCartOpen] = useState(false)
   const { totalQuantity } = useCart()
 
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
   useEffect(() => {
     getInventoryData()
       .then((data) => {
@@ -387,6 +396,16 @@ export const Products = () => {
 
   const toggleCart = () => {
     setCartOpen(!cartOpen)
+  }
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product)
+    setModalOpen(true)
+  }
+
+  const handleModalClose = () => {
+    setModalOpen(false)
+    setSelectedProduct(null)
   }
 
   return (
@@ -439,7 +458,7 @@ export const Products = () => {
         <Grid container spacing={3}>
           {filteredProducts.map((product) => (
             <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-              <ProductCard product={product} />
+              <ProductCard product={product} onClick={handleProductClick} />
             </Grid>
           ))}
         </Grid>
@@ -451,6 +470,33 @@ export const Products = () => {
           setCartOpen(false)
         }}
       />
+      <Dialog
+        open={modalOpen}
+        onClose={handleModalClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          {selectedProduct?.productName}
+          <IconButton
+            aria-label="close"
+            onClick={handleModalClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body1">
+            {selectedProduct?.description || 'Aucune description disponible.'}
+          </Typography>
+        </DialogContent>
+      </Dialog>
     </Container>
   )
 }
