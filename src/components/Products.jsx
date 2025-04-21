@@ -95,7 +95,6 @@ const ProductCard = ({ product, onClick }) => {
         position: 'relative',
         opacity: remainingStock > 0 ? 1 : 0.7,
         background: theme.palette.background.paper,
-        cursor: 'pointer',
       }}
     >
       <Box
@@ -109,7 +108,6 @@ const ProductCard = ({ product, onClick }) => {
           p: 2,
         }}
         onError={handleImageError}
-        onClick={() => onClick(product)}
       />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
@@ -117,6 +115,15 @@ const ProductCard = ({ product, onClick }) => {
         </Typography>
         <Typography gutterBottom variant="h5" component="h2">
           {product.productName}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.primary"
+          sx={{ mb: 1 }}
+          onClick={() => onClick(product)}
+          style={{ cursor: 'pointer' }}
+        >
+          Détails
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           poids: {product.weight}
@@ -493,7 +500,14 @@ export const Products = () => {
         </DialogTitle>
         <DialogContent dividers>
           <Typography variant="body1">
-            {selectedProduct?.description || 'Aucune description disponible.'}
+            {(selectedProduct?.description || 'Aucune description disponible.')
+              .split('\n')
+              .map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
           </Typography>
         </DialogContent>
       </Dialog>
