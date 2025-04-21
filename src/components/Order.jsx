@@ -99,7 +99,7 @@ export const Order = () => {
             <div className="flex column form-column">
               <TextField
                 id="outlined-basic"
-                label="Name"
+                label="Nom"
                 variant="outlined"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -108,7 +108,7 @@ export const Order = () => {
               />
               <TextField
                 id="outlined-basic"
-                label="Street address"
+                label="Adresse"
                 variant="outlined"
                 value={street}
                 onChange={(e) => setStreet(e.target.value)}
@@ -117,7 +117,7 @@ export const Order = () => {
               />
               <TextField
                 id="outlined-basic"
-                label="City"
+                label="Ville"
                 variant="outlined"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -130,7 +130,7 @@ export const Order = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Country"
+                    label="Pays"
                     margin="normal"
                     required
                   />
@@ -154,7 +154,7 @@ export const Order = () => {
               />
               <TextField
                 id="outlined-basic"
-                label="Zip code"
+                label="Code postal"
                 variant="outlined"
                 value={zip}
                 onChange={(e) => setZip(e.target.value)}
@@ -163,7 +163,7 @@ export const Order = () => {
               />
               <TextField
                 id="outlined-basic"
-                label="Phone"
+                label="Téléphone"
                 variant="outlined"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
