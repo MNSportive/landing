@@ -1,3 +1,3 @@
 export const featureFlags = {
-  prematureContentEnabled: false,
+  prematureContentEnabled: true,
 }

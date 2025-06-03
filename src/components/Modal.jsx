@@ -88,7 +88,7 @@ const modalVariations = {
           <section>
             <header>
               <h2>Politique de Confidentialité</h2>
-              <p>Dernière mise à jour: 01/04/2025</p>
+              <p>Dernière mise à jour: 03/06/2025</p>
             </header>
 
             <p>
@@ -289,7 +289,7 @@ const modalVariations = {
           <section>
             <header>
               <h2>Conditions Générales de Vente</h2>
-              <p>Dernière mise à jour : 01/04/2025</p>
+              <p>Dernière mise à jour : 03/06/2025</p>
             </header>
 
             <p>
@@ -353,7 +353,8 @@ const modalVariations = {
               <p>
                 Les prix des produits sont indiqués en EUR, toutes taxes
                 comprises. Les frais de livraison sont inclus ou seront précisés
-                au moment de la commande.
+                au moment de la commande. Le paiement peut s'effectuer en
+                espèces ou par virement bancaire.
               </p>
               <p>
                 Le paiement de votre commande s'effectue exclusivement par
@@ -374,10 +375,10 @@ const modalVariations = {
             <article>
               <h3>5. Livraison</h3>
               <p>
-                Une fois le paiement reçu, votre commande sera expédiée dans un
-                délai de 3 à 5 jours ouvrés après réception du paiement, mais au
-                plus tard dans un délai de 5 jours ouvrables. La livraison sera
-                effectuée à l'adresse de livraison indiquée lors de la commande.
+                Votre commande sera expédiée dans un délai de 3 à 5 jours ouvrés
+                après réception du paiement, mais au plus tard dans un délai de
+                5 jours ouvrables. La livraison sera effectuée à l'adresse de
+                livraison indiquée lors de la commande.
               </p>
 
               <p>
@@ -461,7 +462,7 @@ const modalVariations = {
           <section>
             <header>
               <h2>Limitation de Responsabilité</h2>
-              <p>Dernière mise à jour : 01/04/2025</p>
+              <p>Dernière mise à jour : 03/06/2025</p>
             </header>
 
             <p>
@@ -609,7 +610,11 @@ const modalVariations = {
               <li className="q">
                 Quels sont les moyens de paiement acceptés ?
               </li>
-              <li className="ans">Virement bancaire.</li>
+              <li className="ans">
+                {' '}
+                Le paiement peut s'effectuer en espèces ou par virement
+                bancaire.
+              </li>
             </ul>
           </li>
           <br />
@@ -620,8 +625,7 @@ const modalVariations = {
                 Quels sont les délais de livraison à Mayotte ?
               </li>
               <li className="ans">
-                La livraison prend entre 3 et 5 jours ouvrables après la
-                réception du paiement.
+                La livraison prend entre 3 et 5 jours ouvrables.
               </li>
               <li className="q">La livraison est-elle vraiment gratuite ?</li>
               <li className="ans">Complètement.</li>
