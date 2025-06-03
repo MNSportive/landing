@@ -90,7 +90,8 @@ export const Info = () => {
             et la récupération musculaire. Et ce n’est pas tout : nous proposons
             bien d’autres produits qui contribuent à une alimentation équilibrée
             et à un mode de vie axé sur la performance et la santé. Commandez
-            dès maintenant — la livraison est gratuite partout à Mayotte !
+            dès maintenant — la livraison est gratuite partout à Mayotte ! Le
+            paiement peut s’effectuer en espèces ou par virement bancaire.
           </Typography>
         </Paper>
 
