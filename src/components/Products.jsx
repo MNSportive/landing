@@ -399,7 +399,9 @@ export const Products = () => {
   const filteredProducts =
     categoryFilter === 'all'
       ? products
-      : products.filter((product) => product.category === categoryFilter)
+      : products.filter(
+          (product) => product.category === categoryFilter && !product.isHidden
+        )
 
   const toggleCart = () => {
     setCartOpen(!cartOpen)
