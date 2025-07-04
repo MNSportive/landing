@@ -398,9 +398,9 @@ export const Products = () => {
 
   const filteredProducts =
     categoryFilter === 'all'
-      ? products
+      ? products.filter((product) => !product?.isHidden)
       : products.filter(
-          (product) => product.category === categoryFilter && !product.isHidden
+          (product) => product.category === categoryFilter && !product?.isHidden
         )
 
   const toggleCart = () => {
