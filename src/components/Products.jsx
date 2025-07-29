@@ -116,6 +116,9 @@ const ProductCard = ({ product, onClick }) => {
         <Typography gutterBottom variant="h5" component="h2">
           {product.productName}
         </Typography>
+        <Typography variant="body2" color="text.primary" sx={{ mb: 1 }}>
+          {product.brand || ''}
+        </Typography>
         <Typography
           variant="body2"
           color="text.primary"
