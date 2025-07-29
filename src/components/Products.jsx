@@ -379,7 +379,9 @@ export const Products = () => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const [brandFilter, setBrandFilter] = useState('all')
   const [categories, setCategories] = useState([])
+  const [brands, setBrands] = useState([])
   const [cartOpen, setCartOpen] = useState(false)
   const { totalQuantity } = useCart()
 
@@ -391,17 +393,20 @@ export const Products = () => {
       .then((data) => {
         setProducts(data)
         setCategories([...new Set(data.map((product) => product.category))])
+        setBrands([...new Set(data.map((product) => product.brand))])
       })
       .catch((error) => console.error('Error fetching products:', error))
       .finally(() => setLoading(false))
   }, [])
 
-  const filteredProducts =
-    categoryFilter === 'all'
-      ? products.filter((product) => !product?.isHidden)
-      : products.filter(
-          (product) => product.category === categoryFilter && !product?.isHidden
-        )
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      categoryFilter === 'all' || product.category === categoryFilter
+
+    const matchesBrand = brandFilter === 'all' || product.brand === brandFilter
+
+    return matchesCategory && matchesBrand && !product?.isHidden
+  })
 
   const toggleCart = () => {
     setCartOpen(!cartOpen)
@@ -453,6 +458,20 @@ export const Products = () => {
               {categories.map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="category-filter-label">Marque</InputLabel>
+            <Select
+              value={brandFilter}
+              onChange={(e) => setBrandFilter(e.target.value)}
+            >
+              <MenuItem value="all">Toutes les marques</MenuItem>
+              {brands.map((brand) => (
+                <MenuItem key={brand} value={brand}>
+                  {brand}
                 </MenuItem>
               ))}
             </Select>
