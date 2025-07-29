@@ -586,11 +586,12 @@ const modalVariations = {
       <>
         Mayotte Nutrition Sportive est une entreprise fondée en 2025,
         spécialisée dans la vente de protéines et de compléments alimentaires.
-        Nous vous proposons les produits de BiotechUSA, une marque reconnue pour
-        la qualité et l’efficacité de ses formules. Nous livrons gratuitement
-        sur toute l’île pour vous aider à atteindre vos objectifs sportifs et
-        bien-être en toute simplicité. Boostez vos performances avec des
-        produits de qualité, livrés directement chez vous!
+        Nous vous proposons les produits de BioTechUSA et de PureGold Protein,
+        deux marques reconnues pour la qualité et l’efficacité de leurs
+        formules. Nous livrons gratuitement sur toute l’île pour vous aider à
+        atteindre vos objectifs sportifs et bien-être en toute simplicité.
+        Boostez vos performances avec des produits de qualité, livrés
+        directement chez vous !
       </>
     ),
   },
