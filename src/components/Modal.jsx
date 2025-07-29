@@ -641,16 +641,10 @@ const modalVariations = {
           <li>
             <b>Produits et utilisation</b>
             <ul>
-              <li className="q">
-                Les produits sont-ils authentiques et certifiés ?
-              </li>
+              <li className="q">Les produits sont-ils authentiques ?</li>
               <li className="ans">
-                Oui, tous nos produits sont des produits authentiques
-                BiotechUSA. BiotechUSA est l’un des plus grands fabricants et
-                distributeurs en Europe de compléments alimentaires, aliments
-                spécialisés et vêtements de sport, engagé en faveur du sport et
-                d’un mode de vie sain. Nous croyons que la santé est le plus
-                grand trésor du monde.
+                Oui, tous nos produits sont 100 % authentiques, issus
+                directement de BioTechUSA et PureGold Protein.
               </li>
             </ul>
           </li>
