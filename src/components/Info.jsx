@@ -1,5 +1,5 @@
-import React from 'react'
-import { Box, Button, Typography, Paper, useTheme } from '@mui/material'
+import { Box, Button, Paper, useTheme } from '@mui/material'
+import InfoImg from '../assets/info.webp'
 
 export const Info = () => {
   const theme = useTheme()
@@ -23,78 +23,7 @@ export const Info = () => {
         alignItems="center"
         textAlign="center"
       >
-        {/* Logo or icon could go here */}
-        <Typography
-          variant="h4"
-          component="h1"
-          fontWeight="bold"
-          mb={3}
-          sx={{
-            color: theme.palette.primary.main,
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-          }}
-        >
-          Mayotte Nutrition Sportive
-        </Typography>
-
-        <Box
-          sx={{
-            width: '40px',
-            height: '3px',
-            backgroundColor: theme.palette.primary.main,
-            mb: 3,
-          }}
-        />
-
-        <Typography
-          variant="body1"
-          mb={3}
-          sx={{
-            fontWeight: 500,
-            color: theme.palette.primary.dark,
-          }}
-        >
-          Boostez vos performances avec des produits de qualité, livrés{' '}
-          <i>
-            <b>gratuitement</b>
-          </i>{' '}
-          directement chez vous !
-        </Typography>
-
-        <Paper
-          sx={{
-            width: '100%',
-            p: 3,
-            mb: 2,
-            borderLeft: `4px solid ${theme.palette.primary.main}`,
-            textAlign: 'left',
-          }}
-        >
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            lineHeight={1.6}
-            background={theme.palette.secondary.light}
-          >
-            Atteignez vos objectifs avec Mayotte Nutrition Sportive ! Nous vous
-            livrons partout à Mayotte les compléments alimentaires BiotechUSA,
-            marque de référence pour les sportifs exigeants. Formulés pour
-            optimiser la récupération après l’effort, améliorer les performances
-            et accompagner votre progression, nos produits vous aident à
-            repousser vos limites jour après jour. Découvrez une sélection
-            complète de solutions nutritionnelles : L-Carnitine pour brûler les
-            graisses, pre-workout pour maximiser votre énergie à l’entraînement,
-            barres protéinées pour une collation saine et pratique, Whey
-            Protein, Iso Whey Zero et BCAA Zero pour soutenir la prise de muscle
-            et la récupération musculaire. Et ce n’est pas tout : nous proposons
-            bien d’autres produits qui contribuent à une alimentation équilibrée
-            et à un mode de vie axé sur la performance et la santé. Commandez
-            dès maintenant — la livraison est gratuite partout à Mayotte ! Le
-            paiement peut s’effectuer en espèces ou par virement bancaire.
-          </Typography>
-        </Paper>
-
+        <img src={InfoImg} width={'100%'} style={{ borderRadius: '0.5rem' }} />
         <a href="#products">
           <Button
             variant="contained"
