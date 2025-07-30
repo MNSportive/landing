@@ -31,7 +31,6 @@ import {
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CloseIcon from '@mui/icons-material/Close'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
@@ -440,11 +439,24 @@ export const Products = () => {
         </Typography>
 
         {showPrematureContent && (
-          <IconButton color="primary" onClick={toggleCart}>
-            <Badge badgeContent={totalQuantity} color="error">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
+          <Box
+            sx={{
+              position: totalQuantity > 0 ? 'fixed' : 'static',
+              bottom: totalQuantity > 0 ? 16 : 'auto',
+              right: totalQuantity > 0 ? 16 : 'auto',
+              zIndex: totalQuantity > 0 ? 1000 : 'auto',
+              bgcolor: totalQuantity > 0 ? 'background.paper' : 'transparent',
+              borderRadius: '50%',
+              boxShadow: totalQuantity > 0 ? 3 : 'none',
+              p: 1,
+            }}
+          >
+            <IconButton color="primary" onClick={toggleCart}>
+              <Badge badgeContent={totalQuantity} color="error">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          </Box>
         )}
       </Box>
 
