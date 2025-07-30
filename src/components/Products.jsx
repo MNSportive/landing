@@ -449,9 +449,12 @@ export const Products = () => {
       </Box>
 
       <Box sx={{ mb: 4 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <FilterListIcon color="primary" />
-          <FormControl sx={{ minWidth: 200 }}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          alignItems={{ xs: 'stretch', sm: 'center' }}
+        >
+          <FormControl sx={{ minWidth: { xs: '100%', sm: 200 } }}>
             <InputLabel id="category-filter-label">Catégorie</InputLabel>
             <Select
               value={categoryFilter}
@@ -465,8 +468,8 @@ export const Products = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="category-filter-label">Marque</InputLabel>
+          <FormControl sx={{ minWidth: { xs: '100%', sm: 200 } }}>
+            <InputLabel id="brand-filter-label">Marque</InputLabel>
             <Select
               value={brandFilter}
               onChange={(e) => setBrandFilter(e.target.value)}
