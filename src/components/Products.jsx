@@ -393,7 +393,6 @@ export const Products = () => {
   useEffect(() => {
     getInventoryData()
       .then((data) => {
-        console.log(data)
         setProducts(data)
         setCategories([...new Set(data.map((product) => product.category))])
         setBrands([...new Set(data.map((product) => product.brand))])
