@@ -78,7 +78,7 @@ const ProductCard = ({ product, onClick }) => {
 
   const getProductImage = () => {
     try {
-      return `${GITHUB_REPO_BASE_URL}/_${product.id}_.webp`
+      return `${GITHUB_REPO_BASE_URL}/_${product.image}_.webp`
     } catch (error) {
       console.error(`Error loading image for product ${product.id}:`, error)
       return `${GITHUB_REPO_BASE_URL}/mns.webp`
@@ -99,7 +99,7 @@ const ProductCard = ({ product, onClick }) => {
       <Box
         component="img"
         src={imageError ? fallbackImage : getProductImage()}
-        alt={product.productName}
+        alt={product.product_name}
         sx={{
           width: '100%',
           height: 180,
@@ -113,7 +113,7 @@ const ProductCard = ({ product, onClick }) => {
           {product.category}
         </Typography>
         <Typography gutterBottom variant="h5" component="h2">
-          {product.productName}
+          {product.product_name}
         </Typography>
         <Typography variant="body2" color="text.primary" sx={{ mb: 1 }}>
           {product.brand || ''}
@@ -151,7 +151,7 @@ const ProductCard = ({ product, onClick }) => {
         )}
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {product.consumerPrice.toFixed(2)}€
+          {product.consumer_price.toFixed(2)}€
         </Typography>
       </CardContent>
       {showPrematureContent && (
@@ -284,7 +284,7 @@ const CartDrawer = ({ open, onClose }) => {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={item.productName}
+                      primary={item.product_name}
                       secondary={
                         <React.Fragment>
                           <Typography
@@ -393,6 +393,7 @@ export const Products = () => {
   useEffect(() => {
     getInventoryData()
       .then((data) => {
+        console.log(data)
         setProducts(data)
         setCategories([...new Set(data.map((product) => product.category))])
         setBrands([...new Set(data.map((product) => product.brand))])
@@ -407,7 +408,7 @@ export const Products = () => {
 
     const matchesBrand = brandFilter === 'all' || product.brand === brandFilter
 
-    return matchesCategory && matchesBrand && !product?.isHidden
+    return matchesCategory && matchesBrand && !product?.is_hidden
   })
 
   const toggleCart = () => {
@@ -523,7 +524,7 @@ export const Products = () => {
         fullWidth
       >
         <DialogTitle sx={{ m: 0, p: 2 }}>
-          {selectedProduct?.productName}
+          {selectedProduct?.product_name}
           <IconButton
             aria-label="close"
             onClick={handleModalClose}
