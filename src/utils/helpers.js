@@ -20,9 +20,7 @@ export const postToGoogleForms = async (formId, formData) => {
 
 export const getInventoryData = async () => {
   try {
-    const res = await fetch(
-      'https://raw.githubusercontent.com/MNSportive/mock-data/main/inventory.json'
-    )
+    const res = await fetch('https://mns-server.vercel.app/api/products')
     const json = res.json()
     return json
   } catch (err) {
