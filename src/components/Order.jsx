@@ -7,6 +7,7 @@ import {
   Alert,
   Checkbox,
   FormControlLabel,
+  Card,
 } from '@mui/material'
 import { postToGoogleForms, generateRandomString } from '../utils/helpers'
 import { countries } from '../utils/countries'
@@ -29,6 +30,12 @@ export const Order = () => {
   const [error, setError] = useState(null)
   const [buttonText, setButtonText] = useState('Commander')
   const { items, totalAmount, totalQuantity, clearCart } = useCart()
+
+  const now = new Date()
+  const start = new Date('2025-12-15T00:00:00')
+  const end = new Date('2026-01-30T00:00:00')
+
+  const showBanner = now >= start && now < end
 
   const humanReadableProducts = items
     .map((item) => `${item.quantity} x ${item.productName} - ${item.id}`)
@@ -95,6 +102,22 @@ export const Order = () => {
         <OrderSuccessMessage orderId={orderId} />
       ) : (
         <>
+          {showBanner && (
+            <Card
+              variant="outlined"
+              style={{
+                padding: '2rem',
+                margin: '2rem',
+                maxWidth: '48rem',
+              }}
+            >
+              {' '}
+              Du 25 décembre au 30 janvier, les livraisons seront suspendues en
+              raison des vacances ; vous pouvez toujours passer commande, mais
+              veuillez noter que l’expédition ne reprendra qu’après le 30
+              janvier. Nous vous remercions de votre compréhension.
+            </Card>
+          )}
           <form className="flex row form-row" id="checkout">
             <div className="flex column form-column">
               <TextField
