@@ -29,7 +29,15 @@ export const Order = () => {
   const [_, setData] = useState(null)
   const [error, setError] = useState(null)
   const [buttonText, setButtonText] = useState('Commander')
-  const { items, totalAmount, totalQuantity, clearCart } = useCart()
+
+  const {
+    items,
+    // totalAmount, // subtotal, may need it later
+    finalTotal, // subtotal with shipping if different
+    shippingCost,
+    totalQuantity,
+    clearCart,
+  } = useCart()
 
   const now = new Date()
   const start = new Date('2025-12-15T00:00:00')
@@ -37,9 +45,22 @@ export const Order = () => {
 
   const showBanner = now >= start && now < end
 
-  const humanReadableProducts = items
-    .map((item) => `${item.quantity} x ${item.productName} - ${item.id}`)
-    .join('\n')
+  const getOrderSummary = () => {
+    let summary = items
+      .map(
+        (item) =>
+          `${item.quantity} x ${item.productName} (€${item.price}) - ${item.id}`
+      )
+      .join('\n')
+
+    if (shippingCost > 0) {
+      summary += `\n----------------\nFrais de livraison: ${shippingCost.toFixed(
+        2
+      )}€`
+    }
+
+    return summary
+  }
 
   const emptyInputs = () => {
     setName('')
@@ -56,6 +77,11 @@ export const Order = () => {
     setError(null)
     const generatedOrderId = generateRandomString()
     setOrderId(generatedOrderId)
+
+    // Generate the updated string
+    const humanReadableProducts = getOrderSummary()
+    console.log(humanReadableProducts)
+
     try {
       const res = await postToGoogleForms(
         '1FAIpQLSdl-ZHQkbm7h3_cJ8adH3lCUwM-XeofbI8fSedmC_jbH2jHgg',
@@ -65,8 +91,8 @@ export const Order = () => {
           'entry.628778403': phone,
           'entry.842398486': `${street}, ${city}, ${zip}`,
           'entry.1031965433': country,
-          'entry.775643275': humanReadableProducts,
-          'entry.947045538': totalAmount,
+          'entry.775643275': humanReadableProducts, // Includes shipping text
+          'entry.947045538': finalTotal, // Uses the total with shipping included
           'entry.1325735342': totalQuantity,
           'entry.1599914579': generatedOrderId,
         }
