@@ -206,7 +206,10 @@ const ProductCard = ({ product, onClick }) => {
 const CartDrawer = ({ open, onClose }) => {
   const {
     items,
-    totalAmount,
+    totalAmount, // This is now the Subtotal
+    finalTotal, // This includes shipping (calculated in Context)
+    shippingCost, // Calculated in Context
+    shippingThreshold, // Calculated in Context
     totalQuantity,
     removeFromCart,
     clearCart,
@@ -351,8 +354,40 @@ const CartDrawer = ({ open, onClose }) => {
         )}
 
         <Box sx={{ mt: 2, p: 2, backgroundColor: 'background.paper' }}>
+          {shippingCost > 0 && (
+            <Stack spacing={1} sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Sous-total:
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {totalAmount.toFixed(2)}€
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2" color="error">
+                  Frais de livraison (moins de {shippingThreshold}€):
+                </Typography>
+                <Typography variant="body2" color="error">
+                  +{shippingCost.toFixed(2)}€
+                </Typography>
+              </Box>
+
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontStyle: 'italic' }}
+              >
+                Ajoutez {(shippingThreshold - totalAmount).toFixed(2)}€ pour la
+                livraison gratuite.
+              </Typography>
+              <Divider />
+            </Stack>
+          )}
+
           <Typography variant="h6" gutterBottom>
-            Total: {totalAmount.toFixed(2)}€
+            Total: {finalTotal.toFixed(2)}€
           </Typography>
           <Button
             variant="contained"

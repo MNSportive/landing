@@ -7,6 +7,10 @@ import React, {
 } from 'react'
 import { getInventoryData } from '../utils/helpers'
 
+const SHIPPING_THRESHOLD = 100
+const FLAT_SHIPPING_COST = 3
+const SHIPPING_FEATURE_START_DATE = new Date('2026-01-01')
+
 const initialState = {
   items: [],
   totalQuantity: 0,
@@ -30,10 +34,7 @@ const cartReducer = (state, action) => {
 
         if (currentInCart + adjustedQuantity > product.stock) {
           adjustedQuantity = Math.max(0, product.stock - currentInCart)
-
-          if (adjustedQuantity <= 0) {
-            return state
-          }
+          if (adjustedQuantity <= 0) return state
         }
       }
 
@@ -43,7 +44,6 @@ const cartReducer = (state, action) => {
           ...updatedItems[existingItemIndex],
           quantity: updatedItems[existingItemIndex].quantity + adjustedQuantity,
         }
-
         return {
           ...state,
           items: updatedItems,
@@ -60,7 +60,6 @@ const cartReducer = (state, action) => {
           quantity: adjustedQuantity,
           weight: product.weight,
         }
-
         return {
           ...state,
           items: [...state.items, newItem],
@@ -70,11 +69,9 @@ const cartReducer = (state, action) => {
         }
       }
     }
-
     case 'REMOVE_ITEM': {
       const { productId } = action.payload
       const existingItem = state.items.find((item) => item.id === productId)
-
       if (!existingItem) return state
 
       if (existingItem.quantity === 1) {
@@ -97,15 +94,12 @@ const cartReducer = (state, action) => {
         }
       }
     }
-
     case 'UPDATE_QUANTITY': {
       const { productId, newQuantity, respectStock, maxStock } = action.payload
       const existingItemIndex = state.items.findIndex(
         (item) => item.id === productId
       )
-
       if (existingItemIndex === -1) return state
-
       const existingItem = state.items[existingItemIndex]
       let adjustedQuantity = newQuantity
 
@@ -129,7 +123,6 @@ const cartReducer = (state, action) => {
         ...existingItem,
         quantity: adjustedQuantity,
       }
-
       return {
         ...state,
         items: updatedItems,
@@ -138,10 +131,8 @@ const cartReducer = (state, action) => {
           state.totalAmount + existingItem.price * quantityDifference,
       }
     }
-
     case 'CLEAR_CART':
       return initialState
-
     default:
       return state
   }
@@ -166,7 +157,6 @@ export const CartProvider = ({ children }) => {
         setIsLoading(false)
       }
     }
-
     loadInventory()
   }, [])
 
@@ -180,8 +170,8 @@ export const CartProvider = ({ children }) => {
   }
 
   const addToCart = (product, quantity) => {
+    // ... (unchanged)
     const currentStock = getProductStock(product.id)
-
     const currentInCart =
       state.items.find((item) => item.id === product.id)?.quantity || 0
     const wouldExceedStock = currentInCart + quantity > currentStock
@@ -189,14 +179,10 @@ export const CartProvider = ({ children }) => {
     if (wouldExceedStock) {
       const remainingStock = Math.max(0, currentStock - currentInCart)
       if (remainingStock <= 0) {
-        alert(
-          `Désolé, tout le stock de "${product.productName}" est épuisé ou déjà dans votre panier.`
-        )
+        alert(`Stock épuisé pour "${product.productName}".`)
         return
       } else if (remainingStock < quantity) {
-        alert(
-          `Seulement ${remainingStock} unités de "${product.productName}" sont disponibles. Nous avons ajusté votre panier.`
-        )
+        alert(`Seulement ${remainingStock} disponibles. Panier ajusté.`)
       }
     }
 
@@ -211,21 +197,14 @@ export const CartProvider = ({ children }) => {
   }
 
   const removeFromCart = (productId) => {
-    dispatch({
-      type: 'REMOVE_ITEM',
-      payload: { productId },
-    })
+    dispatch({ type: 'REMOVE_ITEM', payload: { productId } })
   }
 
   const updateQuantity = (productId, newQuantity) => {
     const currentStock = getProductStock(productId)
-
     if (newQuantity > currentStock) {
-      alert(
-        `Vous ne pouvez pas ajouter plus de ${currentStock} unités de ce produit (stock disponible).`
-      )
+      alert(`Max ${currentStock} unités disponibles.`)
     }
-
     dispatch({
       type: 'UPDATE_QUANTITY',
       payload: {
@@ -241,10 +220,30 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_CART' })
   }
 
+  // --- CALCULATE TOTALS WITH DATE CHECK ---
+  const subtotal = Math.round(state.totalAmount * 100) / 100
+
+  // 1. Get current date
+  const now = new Date()
+
+  // 2. Check if we have passed the start date
+  const isShippingFeatureActive = now >= SHIPPING_FEATURE_START_DATE
+
+  // 3. Apply logic ONLY if feature is active
+  const shippingCost =
+    isShippingFeatureActive && subtotal > 0 && subtotal < SHIPPING_THRESHOLD
+      ? FLAT_SHIPPING_COST
+      : 0
+
+  const finalTotal = Math.round((subtotal + shippingCost) * 100) / 100
+
   const value = {
     items: state.items,
     totalQuantity: state.totalQuantity,
-    totalAmount: Math.round(state.totalAmount * 100) / 100,
+    totalAmount: subtotal,
+    shippingCost,
+    finalTotal,
+    shippingThreshold: SHIPPING_THRESHOLD,
     addToCart,
     removeFromCart,
     updateQuantity,
