@@ -7,6 +7,10 @@ import React, {
 } from 'react'
 import { getInventoryData } from '../utils/helpers'
 
+const SHIPPING_THRESHOLD = 100
+const FLAT_SHIPPING_COST = 3
+const SHIPPING_FEATURE_START_DATE = new Date('2026-01-01')
+
 const initialState = {
   items: [],
   totalQuantity: 0,
