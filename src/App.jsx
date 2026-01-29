@@ -30,10 +30,11 @@ function App() {
             {showBanner && (
               <Alert severity="info">
                 {' '}
-                Du 25 décembre au 30 janvier, les livraisons seront suspendues
-                en raison des vacances ; vous pouvez toujours passer commande,
-                mais veuillez noter que l’expédition ne reprendra qu’après le 30
-                janvier. Nous vous remercions de votre compréhension.
+                SUPER PROMO DE FÉVRIER ! Dès 150 € d’achat : livraison gratuite,
+                un shaker offert, des mueslis offerts, et des échantillons de
+                nos produits ! C’est le moment d’en profiter ! Offre valable à
+                partir du 1er février, dans la limite des stocks disponibles, et
+                au plus tard jusqu’au 28 février.
               </Alert>
             )}
             <main className="flex column">

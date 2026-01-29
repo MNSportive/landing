@@ -49,13 +49,13 @@ export const Order = () => {
     let summary = items
       .map(
         (item) =>
-          `${item.quantity} x ${item.productName} (€${item.price}) - ${item.id}`
+          `${item.quantity} x ${item.productName} (€${item.price}) - ${item.id}`,
       )
       .join('\n')
 
     if (shippingCost > 0) {
       summary += `\n----------------\nFrais de livraison: ${shippingCost.toFixed(
-        2
+        2,
       )}€`
     }
 
@@ -95,7 +95,7 @@ export const Order = () => {
           'entry.947045538': finalTotal, // Uses the total with shipping included
           'entry.1325735342': totalQuantity,
           'entry.1599914579': generatedOrderId,
-        }
+        },
       )
 
       if (res && res.error) {
@@ -138,10 +138,11 @@ export const Order = () => {
               }}
             >
               {' '}
-              Du 25 décembre au 30 janvier, les livraisons seront suspendues en
-              raison des vacances ; vous pouvez toujours passer commande, mais
-              veuillez noter que l’expédition ne reprendra qu’après le 30
-              janvier. Nous vous remercions de votre compréhension.
+              SUPER PROMO DE FÉVRIER ! Dès 150 € d’achat : livraison gratuite,
+              un shaker offert, des mueslis offerts, et des échantillons de nos
+              produits ! C’est le moment d’en profiter ! Offre valable à partir
+              du 1er février, dans la limite des stocks disponibles, et au plus
+              tard jusqu’au 28 février.
             </Card>
           )}
           <form className="flex row form-row" id="checkout">
