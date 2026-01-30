@@ -16,7 +16,7 @@ function App() {
   const showPrematureContent = useFeatureFlag('prematureContentEnabled')
   const now = new Date()
   const start = new Date('2025-12-15T00:00:00')
-  const end = new Date('2026-01-30T00:00:00')
+  const end = new Date('2026-02-28T00:00:00')
 
   const showBanner = now >= start && now < end
 
